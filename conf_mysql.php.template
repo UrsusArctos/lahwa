@@ -1,0 +1,15 @@
+<?php // (LahtaWatch) MySQL settings
+declare(encoding='UTF-8');
+// Runtime settings
+ini_set('zend.assertions',1);
+ini_set('assert.exception',1);
+// Connection settings
+define('MYSQL_HOST','hostname');
+define('MYSQL_USER','user');
+define('MYSQL_PASSWORD','password');
+define('MYSQL_DBASE','dbname');
+define('MYSQL_PORT',3306);
+// DB Schema settings
+define('MYSQL_TABLE_SUBJECTS',MYSQL_DBASE.'.lw_subjects');
+define('MYSQL_TABLE_EVENTS',MYSQL_DBASE.'.lw_events');
+?>
