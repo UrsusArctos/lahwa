@@ -19,7 +19,9 @@ echo "Activity span from ".$qres[0]['dmin']." to ".$qres[0]['dmax']." totaling $
 assert($days>0);
 // Prepare canvas and colors
 $graph = imagecreatetruecolor(MINUTES_PER_DAY+1,$days);
-$greenColor = imagecolorallocate($graph,0x80,0xFF,0x80);
+$greenColor = imagecolorallocate($graph,0x40,0xFF,0x40);
+$redColor = imagecolorallocate($graph,0xFF,0x40,0x40);
+$neutralColor = imagecolorallocate($graph,0x80,0x80,0xA0);
 $grayColor = imagecolorallocatealpha($graph,0x80,0x80,0x80,0x60);
 // Draw hourly/yearly grid
 for ($h=0; $h<=24; $h++) { imageline($graph,$h*MINUTES_PER_HOUR,0,$h*MINUTES_PER_HOUR,$days,$grayColor); };
@@ -37,8 +39,11 @@ for ($d = 0; $d<=$days; $d++) {
 		if (count($qres)>0) foreach ($qres as $comment) {
 			// Set pixel
 			$minute = intval($comment['event_minute']);
-			imagesetpixel($graph,$minute,$days-$d,$greenColor);
-			imageellipse($graph,$minute,$days-$d,3,3,$greenColor);
+			$selectColor = $neutralColor;
+			if (intval($comment['rating'])>0) { $selectColor = $greenColor; };
+			if (intval($comment['rating'])<0) { $selectColor = $redColor; };
+			imagesetpixel($graph,$minute,$days-$d,$selectColor);
+			imageellipse($graph,$minute,$days-$d,3,3,$selectColor);
 			echo "#";
 		}
 		echo "\n";

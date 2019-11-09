@@ -13,7 +13,7 @@ function GetMaxCommentPageIndex($subject, $raw_html) {
 
 function GetAllTimeStamps($raw_html) {
 	$matches = array();
-	$match_count = preg_match_all("/<time.*\>(.*)\sв\s(\d{2}\:\d{2})<\/time>/",$raw_html,$matches,PREG_PATTERN_ORDER);
+	$match_count = preg_match_all('/<time.*\>(.*)\sв\s(\d{2}\:\d{2})<\/time>/',$raw_html,$matches,PREG_PATTERN_ORDER);
 	assert($match_count!==false);
 	assert($match_count>0);
 	// Handle special day cases (today and yesterday)
@@ -37,6 +37,17 @@ function GetAllTimeStamps($raw_html) {
 		$result[$idx]['parsed'] = $parsed;
 	}
 	return $result;
+}
+
+function GetAllRatings($raw_html) {
+	$matches = array();
+	// Bear in mind, what appears to be the minus sign is actually U+2013 EN DASH
+	$match_count = preg_match_all('/<span class="voting-wjt__counter.*">([\x{2013}+]?\d*)<\/span>/u',$raw_html,$matches,PREG_PATTERN_ORDER);
+	assert($match_count!==false);
+	assert($match_count>0);
+	// Make it all numbers. Intval needs good old U+002D HYPHEN MINUS for minus, so convert it.
+	array_walk($matches[1],function (&$item, $key) { $item = intval(str_replace("\u{2013}","\u{002D}",$item)); });
+	return $matches[1];
 }
 
 ?>

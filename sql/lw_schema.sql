@@ -13,6 +13,7 @@
 CREATE TABLE IF NOT EXISTS `lw_events` (
   `sid` int(10) unsigned NOT NULL COMMENT 'Subject numerical ID',
   `commevent` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Timestamp of commenting event',
+  `rating` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Comment rating',
   UNIQUE KEY `sid_commevent` (`sid`,`commevent`),
   CONSTRAINT `FK_event_subjects` FOREIGN KEY (`sid`) REFERENCES `lw_subjects` (`sid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Events';

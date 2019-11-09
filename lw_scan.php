@@ -26,11 +26,13 @@ do {
 	echo $maxidx." : ";
 	// Get all timestamps from raw page
 	$tstamps = GetAllTimeStamps($page_raw_html);
+	$ratings = GetAllRatings($page_raw_html);
+	assert(count($tstamps)===count($ratings));
 	// Update database	
-	$query = 'INSERT IGNORE INTO '.MYSQL_TABLE_EVENTS.' (sid,commevent) VALUES ';
+	$query = 'INSERT IGNORE INTO '.MYSQL_TABLE_EVENTS.' (sid,commevent,rating) VALUES ';
 	$comma = '';
-	foreach ($tstamps as $event) {
-		$query .= $comma.'('.$subj_ID.',FROM_UNIXTIME('.$event['unixtime'].'))';
+	foreach ($tstamps as $index => $event) {
+		$query .= $comma.'('.$subj_ID.',FROM_UNIXTIME('.$event['unixtime'].'),'.$ratings[$index].')';
 		$comma = ',';
 		echo ".";
 	}
@@ -39,6 +41,8 @@ do {
 	// Prepare for next page
 	$pidx++;
 } while ($pidx<=$maxidx);
+// Say good-bye
+echo "Remember, this was subject $subj_ID ($subj)\n";
 // Cleanup
 unset($mysql);
 ?>
